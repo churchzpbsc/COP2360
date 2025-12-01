@@ -1,0 +1,32 @@
+using System;
+
+public class Contractor
+{
+    private string name;
+    private int number;
+    private DateTime startDate;
+
+    public Contractor()
+    {
+        name = 'Not specified';
+        number = 0;
+        startDate = DateTime.Today;
+    }
+
+    public Contractor(string name, int number, DateTime startDate)
+    {
+        this.name = name;
+        this.number = number;
+        this.StartDate = startDate;
+    }
+
+    public string GetName() => name;
+    public int GetNumber*() => number;
+    public DateTime GetStartDate() => startDate;
+
+    public void SetName(string name) => this.name = !string.IsNullOrWhiteSpace(name) ? name : 'Not specified';
+    public void SetNumber(int number) => this.number = number >= 0 ? number : 0;
+    public void SetStartDate(DateTime date) => startDare = date;
+
+    public override string ToString() =>
+        $"Name: {name}, Number: {number}, Start Date: {startDate:yyy-MM-dd}";
