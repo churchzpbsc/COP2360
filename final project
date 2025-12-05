@@ -8,25 +8,40 @@ public class Contractor
 
     public Contractor()
     {
-        name = 'Not specified';
+        name = "Not specified"; 
         number = 0;
         startDate = DateTime.Today;
+    }
+
+    public Contractor(string name, int number)
+    {
+        // In case, a time and date are not specified.
+        this.name = name;
+        this.number = number;
+        this.startDate = DateTime.Today;
     }
 
     public Contractor(string name, int number, DateTime startDate)
     {
         this.name = name;
         this.number = number;
-        this.StartDate = startDate;
+        this.startDate = startDate;
     }
 
     public string GetName() => name;
-    public int GetNumber*() => number;
+    public int GetNumber() => number;
     public DateTime GetStartDate() => startDate;
 
-    public void SetName(string name) => this.name = !string.IsNullOrWhiteSpace(name) ? name : 'Not specified';
+    public void SetName(string name) => this.name = !string.IsNullOrWhiteSpace(name) ? name : "Not specified";
     public void SetNumber(int number) => this.number = number >= 0 ? number : 0;
-    public void SetStartDate(DateTime date) => startDare = date;
+    public void SetStartDate(DateTime date) => startDate = date;
 
     public override string ToString() =>
         $"Name: {name}, Number: {number}, Start Date: {startDate:yyy-MM-dd}";
+}
+
+public class Subcontractor : Contractor
+{
+    private int shift;
+    private double hourlyRate;
+}
