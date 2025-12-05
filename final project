@@ -42,6 +42,60 @@ public class Contractor
 
 public class Subcontractor : Contractor
 {
+    // Shift: 1 - dayshift, 2 - nightshift 
     private int shift;
     private double hourlyRate;
+
+    public Subcontractor() : base()
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number) : base(name, number)
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number, DateTime startDate) : base(name, number, startDate)
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number, DateTime startDate, int shift, double hourlyRate) : base(name, number, startDate)
+    {
+        this.shift = shift;
+        this.hourlyRate = hourlyRate;
+    }
+
+    public int GetShift() => shift;
+    public double GetHourlyRate() => hourlyRate;
+
+    public void SetShift(int shift) => this.shift = (shift >= 1 && shift <= 2) ? shift : 1;
+    public void SetHourlyRate(double hourlyRate) => this.hourlyRate = hourlyRate >= 0 ? hourlyRate : 0;
+
+    public override string ToString()
+    {
+        string description;
+        string shiftName;
+
+        switch (this.shift)
+        {
+            case 1:
+                shiftName = "Day Shift";
+                break; 
+            case 2:
+                shiftName = "Night Shift"; 
+                break;
+            default:
+                shiftName = "Not specified";
+                break;
+        }
+
+        description = $"{base.ToString()}, {shiftName}, Hourly Rate: {hourlyRate.ToString("C")}/hr";
+        return description;
+    }
+
 }
