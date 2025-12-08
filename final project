@@ -108,6 +108,10 @@ public class Subcontractor : Contractor
         description = $"{base.ToString()}, {shiftName}, Hourly Rate: {(hourlyRate + nightShiftBonus).ToString("C")}/hr";
         return description;
     }
+    public double ComputePay(double hoursWorked)
+    {
+        return hoursWorked * (hourlyRate + nightShiftBonus);
+    }
 
 }
 
