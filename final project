@@ -149,7 +149,13 @@ public class ContractingProgram
 
         for (int i = 0; i < numSubcontractors; ++i)
         {
-            Console.WriteLine(workersNeeded[i].ToString());
+            double hoursWorked;
+            Console.Write($"Enter hours worked this week for {workersNeeded[i].GetName()} >> ");
+            hoursWorked = Convert.ToDouble(Console.ReadLine());
+
+            double totalPay = workersNeeded[i].ComputePay(hoursWorked);
+            Console.WriteLine($"Total pay for {workersNeeded[i].GetName()} is: {totalPay.ToString("C")}\n");
+
         }
     }
 }
