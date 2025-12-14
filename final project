@@ -8,25 +8,158 @@ public class Contractor
 
     public Contractor()
     {
-        name = 'Not specified';
+        name = "Not specified"; 
         number = 0;
         startDate = DateTime.Today;
+    }
+
+    public Contractor(string name, int number)
+    {
+        // In case, a time and date are not specified.
+        this.name = name;
+        this.number = number;
+        this.startDate = DateTime.Today;
     }
 
     public Contractor(string name, int number, DateTime startDate)
     {
         this.name = name;
         this.number = number;
-        this.StartDate = startDate;
+        this.startDate = startDate;
     }
 
     public string GetName() => name;
-    public int GetNumber*() => number;
+    public int GetNumber() => number;
     public DateTime GetStartDate() => startDate;
 
-    public void SetName(string name) => this.name = !string.IsNullOrWhiteSpace(name) ? name : 'Not specified';
+    public void SetName(string name) => this.name = !string.IsNullOrWhiteSpace(name) ? name : "Not specified";
     public void SetNumber(int number) => this.number = number >= 0 ? number : 0;
-    public void SetStartDate(DateTime date) => startDare = date;
+    public void SetStartDate(DateTime date) => startDate = date;
 
     public override string ToString() =>
         $"Name: {name}, Number: {number}, Start Date: {startDate:yyy-MM-dd}";
+}
+
+public class Subcontractor : Contractor
+{
+    // Shift: 1 - dayshift, 2 - nightshift 
+    private int shift;
+    private double hourlyRate;
+    private double nightShiftBonus;
+
+    public Subcontractor() : base()
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number) : base(name, number)
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number, DateTime startDate) : base(name, number, startDate)
+    {
+        this.shift = 1;
+        this.hourlyRate = 0.00;
+    }
+
+    public Subcontractor(string name, int number, DateTime startDate, int shift, double hourlyRate) : base(name, number, startDate)
+    {
+        this.shift = shift;
+        this.hourlyRate = hourlyRate;
+        this.nightShiftBonus = shift == 2 ? hourlyRate * 0.03 : 0;
+    }
+
+    public int GetShift() => shift;
+    public double GetHourlyRate() => hourlyRate;
+
+    public void SetShift(int shift)
+    {
+        this.shift = (shift >= 1 && shift <= 2) ? shift : 1;
+        this.nightShiftBonus = shift == 2 ? hourlyRate * 0.03 : 0;
+    }
+
+    public void SetHourlyRate(double hourlyRate)
+    {
+        this.hourlyRate = hourlyRate >= 0 ? hourlyRate : 0;
+        this.nightShiftBonus = this.shift == 2 ? hourlyRate * 0.03 : 0; 
+    }
+
+    public override string ToString()
+    {
+        string description;
+        string shiftName;
+
+        switch (this.shift)
+        {
+            case 1:
+                shiftName = "Day Shift";
+                break; 
+            case 2:
+                shiftName = "Night Shift"; 
+                break;
+            default:
+                shiftName = "Not specified";
+                break;
+        }
+
+        description = $"{base.ToString()}, {shiftName}, Hourly Rate: {(hourlyRate + nightShiftBonus).ToString("C")}/hr";
+        return description;
+    }
+    public double ComputePay(double hoursWorked)
+    {
+        return hoursWorked * (hourlyRate + nightShiftBonus);
+    }
+
+}
+
+// Program that uses the child class
+public class ContractingProgram
+{
+    public static void Main(string[] args)
+    {
+        int numSubcontractors;
+        
+        Console.Write("How many subcontractors are needed for this project? >> ");
+        numSubcontractors = Convert.ToInt32(Console.ReadLine());
+
+        Subcontractor[] workersNeeded = new Subcontractor[numSubcontractors];
+
+        Console.WriteLine("Beginning Contractor List...\n");
+
+        for (int i = 0; i < numSubcontractors; ++i)
+        {
+            string workerName;
+            int shiftNumber;
+            double payRate;
+            
+            Console.Write($"Enter the name of subcontractor {i+1} >> ");
+            workerName = Console.ReadLine();
+
+            Console.Write($"Does this contractor work the day shift (type 1) or the night shift (type 2)? >> ");
+            shiftNumber = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write($"Enter the contractor's hourly rate (without any bonuses) >> ");
+            payRate = Convert.ToDouble(Console.ReadLine());
+
+            workersNeeded[i] = new Subcontractor(workerName, i+1, DateTime.Now, shiftNumber, payRate);
+
+            Console.WriteLine(); // Line break
+        }
+
+        Console.WriteLine("\nCONTRACTORS:\n");
+
+        for (int i = 0; i < numSubcontractors; ++i)
+        {
+            double hoursWorked;
+            Console.Write($"Enter hours worked this week for {workersNeeded[i].GetName()} >> ");
+            hoursWorked = Convert.ToDouble(Console.ReadLine());
+
+            double totalPay = workersNeeded[i].ComputePay(hoursWorked);
+            Console.WriteLine($"Total pay for {workersNeeded[i].GetName()} is: {totalPay.ToString("C")}\n");
+
+        }
+    }
+}
